@@ -7,6 +7,7 @@ public class MainHudView : MonoBehaviour
     [SerializeField] private TextMeshProUGUI _moneyLabel;
     [SerializeField] private TextMeshProUGUI _capacityLabel;
     [SerializeField] private Button _fishButton;
+    [SerializeField] private Button _sellAllButton;
 
     private void OnEnable()
     {
@@ -20,12 +21,16 @@ public class MainHudView : MonoBehaviour
         EventBus.OnInventoryChanged -= UpdateCapacity;
     }
 
+    private void Awake()
+    {
+        if (_fishButton) _fishButton.onClick.AddListener(OnFish);
+        if (_sellAllButton) _sellAllButton.onClick.AddListener(OnSellAll);
+    }
+
     private void Start()
     {
         GameState s = GameManager.Instance.GetState();
         if (s != null) { UpdateMoney(s.money); UpdateCapacity(); }
-
-        if (_fishButton) _fishButton.onClick.AddListener(OnFish);
     }
 
     private void OnFish()
@@ -37,6 +42,12 @@ public class MainHudView : MonoBehaviour
             FishEncounter? e = f.StartFishing();
             if (e.HasValue) m.BeginFishing(e.Value);
         }
+    }
+
+    private void OnSellAll()
+    {
+        EconomySystem e = GameManager.Instance?.GetEconomySystem();
+        if (e != null) e.SellAllFish();
     }
 
     private void UpdateMoney(float v) { if (_moneyLabel) _moneyLabel.text = $"${v:F0}"; }

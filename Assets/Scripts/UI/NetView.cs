@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -10,6 +9,10 @@ public class NetView : MonoBehaviour
     [SerializeField] private RectTransform _gridContent;
     [SerializeField] private NetSlotWidget _slotPrefab;
 
+    [Header("Filter Area")]
+    [SerializeField] private RectTransform _filterArea;
+    [SerializeField] private NetFilterRowWidget _filterRowPrefab;
+
     [Header("Overall Fill")]
     [SerializeField] private Image _overallFillBar;
     [SerializeField] private TextMeshProUGUI _overallFillLabel;
@@ -18,6 +21,7 @@ public class NetView : MonoBehaviour
     [SerializeField] private Button _collectAllButton;
 
     private List<NetSlotWidget> _slots = new List<NetSlotWidget>();
+    private List<NetFilterRowWidget> _filterRows = new List<NetFilterRowWidget>();
 
     private void OnEnable()
     {
@@ -44,11 +48,12 @@ public class NetView : MonoBehaviour
         if (nets == null) return;
 
         bool matched = false;
-        for (int i = 0; i < nets.Count && i < _slots.Count; i++)
+        for (int i = 0; i < nets.Count; i++)
         {
             if (nets[i].netId == netId)
             {
-                _slots[i].Refresh(nets[i]);
+                if (i < _slots.Count) _slots[i].Refresh(nets[i]);
+                if (i < _filterRows.Count) _filterRows[i].Refresh(nets[i]);
                 matched = true;
                 break;
             }
@@ -59,9 +64,32 @@ public class NetView : MonoBehaviour
 
     public void Rebuild()
     {
-        if (_gridContent == null || _slotPrefab == null) return;
         GameState state = GameManager.Instance?.GetState();
         if (state == null) return;
+
+        RebuildFilterRows(state);
+        RebuildGrid(state);
+        RefreshOverall();
+    }
+
+    private void RebuildFilterRows(GameState state)
+    {
+        if (_filterArea == null || _filterRowPrefab == null) return;
+
+        foreach (var r in _filterRows) { if (r != null) Destroy(r.gameObject); }
+        _filterRows.Clear();
+
+        for (int i = 0; i < state.nets.Count; i++)
+        {
+            NetFilterRowWidget row = Instantiate(_filterRowPrefab, _filterArea);
+            row.Setup(state.nets[i].netId, i, state.nets[i]);
+            _filterRows.Add(row);
+        }
+    }
+
+    private void RebuildGrid(GameState state)
+    {
+        if (_gridContent == null || _slotPrefab == null) return;
 
         foreach (var s in _slots) { if (s != null) Destroy(s.gameObject); }
         _slots.Clear();
@@ -72,8 +100,6 @@ public class NetView : MonoBehaviour
             slot.Setup(net);
             _slots.Add(slot);
         }
-
-        RefreshOverall();
     }
 
     private void RefreshOverall()

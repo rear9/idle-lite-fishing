@@ -16,20 +16,20 @@ MonoBehaviour:
   displayName: Calm Coastal Waters
   availableFish:
   - species: {fileID: 11400000, guid: f03fbfba535d1fa408140ce0460c5f1f, type: 2}
-    spawnWeight: 30
-  - species: {fileID: 11400000, guid: 54a064a149cf5f547b2a8012b31c1335, type: 2}
     spawnWeight: 25
-  - species: {fileID: 11400000, guid: 5688adcbe3b89b042bb947fbf57a3a9c, type: 2}
+  - species: {fileID: 11400000, guid: 54a064a149cf5f547b2a8012b31c1335, type: 2}
     spawnWeight: 20
+  - species: {fileID: 11400000, guid: 5688adcbe3b89b042bb947fbf57a3a9c, type: 2}
+    spawnWeight: 10
   - species: {fileID: 11400000, guid: 571f6986485af2840826af471c0c9cf6, type: 2}
-    spawnWeight: 15
+    spawnWeight: 10
   - species: {fileID: 11400000, guid: 2e25ae79018b19a4ca8834b5ba597d21, type: 2}
-    spawnWeight: 5
+    spawnWeight: 10
   - species: {fileID: 11400000, guid: 62ada92d6634de84b86ef0c948faf6b9, type: 2}
-    spawnWeight: 3
+    spawnWeight: 10
   - species: {fileID: 11400000, guid: 43266ac26ec2abb43b565e20a5652625, type: 2}
-    spawnWeight: 1.5
+    spawnWeight: 10
   - species: {fileID: 11400000, guid: 9bc6bb76ed742bd49adc3705d1066f65, type: 2}
-    spawnWeight: 0.5
-  netRewardTable: {fileID: 0}
+    spawnWeight: 5
+  netRewardTable: {fileID: 11400000, guid: 99c095bfb39d38942b8902550e747afd, type: 2}
   unlockCondition: 

@@ -44,19 +44,21 @@ public class FishingMinigameView : MonoBehaviour
 
     private void Awake()
     {
-        _cancelButton.onClick.AddListener(Cancel);
-        _barHeight = _barArea?.rect.height ?? 600f;
+        if (_cancelButton) _cancelButton.onClick.AddListener(Cancel);
+        _barHeight = _barArea != null ? _barArea.rect.height : 600f;
         _input = FindFirstObjectByType<InputHandler>();
-        gameObject.SetActive(false);
     }
 
     public void Initialize(FishingSystem system) => _fishingSystem = system;
 
     public void BeginFishing(FishEncounter encounter)
     {
+        _active = true;
         _currentEncounter = encounter;
         gameObject.SetActive(true);
-        _active = true;
+
+        if (_input == null) _input = FindFirstObjectByType<InputHandler>();
+        if (_barArea != null) _barHeight = _barArea.rect.height;
 
         _markerPos = 0.5f;
         _zonePos = 0.5f;
@@ -72,7 +74,7 @@ public class FishingMinigameView : MonoBehaviour
         _gravity = 0.3f + d * 1.8f;
         _reelSpeed = GameManager.Instance.GetState().upgrades.currentReelSpeed;
 
-        _fishInfoLabel.text = encounter.isReachable ? "???" : "Too strong!";
+        if (_fishInfoLabel) _fishInfoLabel.text = encounter.species.displayName;
     }
 
     private void Update()
@@ -136,12 +138,18 @@ public class FishingMinigameView : MonoBehaviour
 
     private void UpdateVisuals()
     {
-        float zY = Mathf.Lerp(-_barHeight / 2f + _zoneHeight * _barHeight / 2f, _barHeight / 2f - _zoneHeight * _barHeight / 2f, _zonePos);
-        _fishZone.anchoredPosition = new Vector2(_fishZone.anchoredPosition.x, zY);
-        _fishZone.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, _zoneHeight * _barHeight);
+        if (_fishZone != null)
+        {
+            float zY = Mathf.Lerp(-_barHeight / 2f + _zoneHeight * _barHeight / 2f, _barHeight / 2f - _zoneHeight * _barHeight / 2f, _zonePos);
+            _fishZone.anchoredPosition = new Vector2(_fishZone.anchoredPosition.x, zY);
+            _fishZone.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, _zoneHeight * _barHeight);
+        }
 
-        float mY = Mathf.Lerp(-_barHeight / 2f, _barHeight / 2f, _markerPos);
-        _playerMarker.anchoredPosition = new Vector2(_playerMarker.anchoredPosition.x, mY);
+        if (_playerMarker != null)
+        {
+            float mY = Mathf.Lerp(-_barHeight / 2f, _barHeight / 2f, _markerPos);
+            _playerMarker.anchoredPosition = new Vector2(_playerMarker.anchoredPosition.x, mY);
+        }
 
         if (_catchProgressBar) _catchProgressBar.fillAmount = _catchProgress;
         if (_escapeProgressBar) _escapeProgressBar.fillAmount = _escapeProgress;

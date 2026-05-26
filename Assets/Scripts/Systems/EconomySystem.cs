@@ -69,6 +69,23 @@ public class EconomySystem : MonoBehaviour
         return s != null && SellMaterial(id, s.count);
     }
 
+    public void SellAllFish()
+    {
+        var toSell = _state.inventory.fish.Where(f => f.state == FishState.Inventory).ToList();
+        if (toSell.Count == 0) return;
+        float total = 0f;
+        foreach (FishInstance f in toSell)
+        {
+            FishSpeciesData sp = GameManager.Instance.GetSpeciesData(f.speciesId);
+            if (sp == null) continue;
+            total += GetFishSaleValue(f, sp);
+            _state.inventory.fish.Remove(f);
+        }
+        _state.money += total;
+        EventBus.InventoryChanged();
+        EventBus.MoneyChanged(_state.money);
+    }
+
     public bool SellOutput(FishOutputItem o)
     {
         if (!_state.inventory.outputs.Contains(o)) return false;

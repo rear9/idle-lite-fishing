@@ -101,6 +101,7 @@ public class GameManager : MonoBehaviour
     public EconomyBalanceData GetEconomyBalance() => _economyBalance;
     public FishingSystem GetFishingSystem() => _fishingSystem;
     public FishingMinigameView GetFishingMinigameView() => _fishingMinigameView;
+    public EconomySystem GetEconomySystem() => _economySystem;
     public NetSystem GetNetSystem() => _netSystem;
 
     public FishSpeciesData GetSpeciesData(string id) => _allSpecies.FirstOrDefault(s => s.speciesId == id);

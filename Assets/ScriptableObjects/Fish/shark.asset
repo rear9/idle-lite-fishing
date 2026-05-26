@@ -21,7 +21,7 @@ MonoBehaviour:
   minLength: 200
   maxLength: 600
   baseDifficulty: 0.95
-  requiredRodPower: 4
+  requiredRodPower: 1
   canBeHoused: 1
   outputType: 1
   baseProductionTime: 600
