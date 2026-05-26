@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eb88844d4b3dbd041af8a8e5f3ebd963, type: 3}
+  m_Name: cod
+  m_EditorClassIdentifier: 
+  speciesId: cod
+  displayName: Cod
+  rarity: 1
+  baseSaleValue: 10
+  minWeight: 1
+  maxWeight: 4
+  minLength: 40
+  maxLength: 80
+  baseDifficulty: 0.35
+  requiredRodPower: 1
+  canBeHoused: 1
+  outputType: 0
+  baseProductionTime: 180
+  baseOutputValue: 22

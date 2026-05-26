@@ -1,0 +1,57 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4ae0d2171ba33d341b14ef88f1681b52, type: 3}
+  m_Name: reward_table_tier_1
+  m_EditorClassIdentifier: 
+  tier: {fileID: 11400000, guid: a35ff02c48eff554eaed8cc1aa3a229a, type: 2}
+  balancedTable:
+  - rewardId: sardine
+    type: 0
+    weight: 25
+  - rewardId: mackerel
+    type: 0
+    weight: 20
+  - rewardId: wood
+    type: 1
+    weight: 30
+  - rewardId: rope
+    type: 1
+    weight: 20
+  - rewardId: plastic_bottle
+    type: 1
+    weight: 25
+  fishFocusedTable:
+  - rewardId: sardine
+    type: 0
+    weight: 35
+  - rewardId: mackerel
+    type: 0
+    weight: 30
+  - rewardId: bass
+    type: 0
+    weight: 20
+  - rewardId: cod
+    type: 0
+    weight: 15
+  materialFocusedTable:
+  - rewardId: wood
+    type: 1
+    weight: 35
+  - rewardId: rope
+    type: 1
+    weight: 25
+  - rewardId: plastic_bottle
+    type: 1
+    weight: 30
+  - rewardId: scrap_metal
+    type: 1
+    weight: 10

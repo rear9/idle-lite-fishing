@@ -1,0 +1,72 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4ae0d2171ba33d341b14ef88f1681b52, type: 3}
+  m_Name: reward_table_tier_3
+  m_EditorClassIdentifier: 
+  tier: {fileID: 11400000, guid: ca3498d972db78d4588e1ae69cbb566d, type: 2}
+  balancedTable:
+  - rewardId: bass
+    type: 0
+    weight: 10
+  - rewardId: cod
+    type: 0
+    weight: 15
+  - rewardId: salmon
+    type: 0
+    weight: 20
+  - rewardId: tuna
+    type: 0
+    weight: 20
+  - rewardId: swordfish
+    type: 0
+    weight: 10
+  - rewardId: scrap_metal
+    type: 1
+    weight: 10
+  - rewardId: spring
+    type: 1
+    weight: 10
+  - rewardId: wood
+    type: 1
+    weight: 5
+  fishFocusedTable:
+  - rewardId: salmon
+    type: 0
+    weight: 20
+  - rewardId: tuna
+    type: 0
+    weight: 25
+  - rewardId: swordfish
+    type: 0
+    weight: 25
+  - rewardId: shark
+    type: 0
+    weight: 10
+  - rewardId: cod
+    type: 0
+    weight: 20
+  materialFocusedTable:
+  - rewardId: scrap_metal
+    type: 1
+    weight: 30
+  - rewardId: spring
+    type: 1
+    weight: 35
+  - rewardId: wood
+    type: 1
+    weight: 10
+  - rewardId: rope
+    type: 1
+    weight: 10
+  - rewardId: plastic_bottle
+    type: 1
+    weight: 15
