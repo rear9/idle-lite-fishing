@@ -32,7 +32,7 @@ public class NetView : MonoBehaviour
     private void OnDisable()
     {
         EventBus.OnNetStateChanged -= OnNetChanged;
-        if (_collectAllButton) _collectAllButton.onClick.RemoveListener(CollectAll);
+        if (_collectAllButton) _collectAllButton.onClick.RemoveAllListeners();
     }
 
     private void Start() { Rebuild(); }

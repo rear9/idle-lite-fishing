@@ -13,6 +13,7 @@ public class NetSystem : MonoBehaviour
     private InventorySystem _inventory;
     private NetTierData[] _tiers;
     private NetRewardTableData[] _rewardTables;
+    private bool changed = false;
 
     public void Initialize(GameState state, TimeService time, EconomyBalanceData economy,
         InventorySystem inventory, NetTierData[] allTiers, NetRewardTableData[] allTables)
@@ -23,9 +24,6 @@ public class NetSystem : MonoBehaviour
         _inventory = inventory;
         _tiers = allTiers;
         _rewardTables = allTables;
-
-        if (isActiveAndEnabled)
-            _time.OnScaledTick += Tick;
     }
 
     private void OnEnable()
@@ -68,11 +66,12 @@ public class NetSystem : MonoBehaviour
                 net.fillProgress -= 1f;
                 int c = net.fishContents.Count + net.materialContents.Count;
                 if (tier.capacity > 0 && c >= tier.capacity) break;
+                changed = true;
                 GenerateReward(net);
             }
-
-            EventBus.NetStateChanged(net.netId);
+            if (changed) EventBus.NetStateChanged(net.netId);
         }
+        changed = false;
     }
 
     private void GenerateReward(NetState net)
@@ -155,9 +154,7 @@ public class NetSystem : MonoBehaviour
             addedAny = true;
         }
 
-        if (addedAny)
-            EventBus.NetStateChanged(netId);
-
+        if (addedAny) EventBus.NetStateChanged(netId);
         return addedAny;
     }
 

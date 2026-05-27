@@ -6,7 +6,7 @@ public class SaveService : MonoBehaviour
 {
     [SerializeField] private string _fileName = "save.json";
 
-    private string Path => Application.persistentDataPath + "/" + _fileName;
+    private string Path => System.IO.Path.Combine(Application.persistentDataPath, _fileName);
 
     public void Save(GameState state)
     {

@@ -38,8 +38,7 @@ public class EconomySystem : MonoBehaviour
 
         float value = GetFishSaleValue(f, sp);
         _state.money += value;
-        f.state = FishState.Sold;
-        _state.inventory.fish.Remove(f);
+        _inventory.RemoveFish(f.instanceId);
 
         EventBus.InventoryChanged();
         EventBus.MoneyChanged(_state.money);
@@ -79,7 +78,7 @@ public class EconomySystem : MonoBehaviour
             FishSpeciesData sp = GameManager.Instance.GetSpeciesData(f.speciesId);
             if (sp == null) continue;
             total += GetFishSaleValue(f, sp);
-            _state.inventory.fish.Remove(f);
+            _inventory.RemoveFish(f.instanceId);
         }
         _state.money += total;
         EventBus.InventoryChanged();

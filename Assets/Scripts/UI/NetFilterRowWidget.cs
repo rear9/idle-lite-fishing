@@ -1,3 +1,4 @@
+using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -14,15 +15,17 @@ public class NetFilterRowWidget : MonoBehaviour
 
     private string _netId;
 
+    private void Awake()
+    {
+        _balancedBtn.onClick.AddListener(() => Set(NetFilter.Balanced));
+        _fishBtn.onClick.AddListener(() => Set(NetFilter.FishFocused));
+        _materialBtn.onClick.AddListener(() => Set(NetFilter.MaterialFocused));
+    }
+
     public void Setup(string netId, int index, NetState net)
     {
         _netId = netId;
         if (_nameLabel) _nameLabel.text = $"Net {index + 1}";
-
-        _balancedBtn.onClick.AddListener(() => Set(NetFilter.Balanced));
-        _fishBtn.onClick.AddListener(() => Set(NetFilter.FishFocused));
-        _materialBtn.onClick.AddListener(() => Set(NetFilter.MaterialFocused));
-
         Refresh(net);
     }
 

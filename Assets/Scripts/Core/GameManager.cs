@@ -27,7 +27,11 @@ public class GameManager : MonoBehaviour
     [SerializeField] private List<ZoneData> _allZones;
     [SerializeField] private List<NetTierData> _allNetTiers;
     [SerializeField] private List<NetRewardTableData> _allNetRewardTables;
-
+    
+    private Dictionary<string, FishSpeciesData> _speciesMap;
+    private Dictionary<string, MaterialData> _materialMap;
+    private Dictionary<string, ZoneData> _zoneMap;
+    private Dictionary<int, NetTierData> _netTierMap;
     private GameState _state;
 
     private void Awake()
@@ -56,6 +60,10 @@ public class GameManager : MonoBehaviour
             _state = CreateDefaultState();
         }
 
+        _speciesMap = _allSpecies.ToDictionary(s => s.speciesId);
+        _materialMap = _allMaterials.ToDictionary(s => s.materialId);
+        _zoneMap = _allZones.ToDictionary(s => s.zoneId);
+        _netTierMap = _allNetTiers.ToDictionary(s => s.tier);
         LogSummary();
         InitSystems();
         EventBus.MoneyChanged(_state.money);
@@ -68,21 +76,24 @@ public class GameManager : MonoBehaviour
         _economySystem.Initialize(_state, _inventorySystem);
         _fishingSystem.Initialize(_state, _inventorySystem, _economyBalance);
         _fishingMinigameView.Initialize(_fishingSystem);
-        _netSystem.Initialize(_state, _timeService, _economyBalance, _inventorySystem,
-            _allNetTiers.ToArray(), _allNetRewardTables.ToArray());
+        _netSystem.Initialize(_state, _timeService, _economyBalance, _inventorySystem, _allNetTiers.ToArray(), _allNetRewardTables.ToArray());
     }
 
     private GameState CreateDefaultState()
     {
-        GameState s = new GameState();
-        s.money = _economyBalance.startingMoney;
+        GameState s = new GameState
+        {
+            money = _economyBalance.startingMoney,
+            currentZoneId = "calm_coastal_waters",
+            lastSaveTime = DateTime.UtcNow.ToString("O")
+        };
+        
+        s.upgrades.currentRodPower = 1;
         s.upgrades.currentRodPower = 1;
         s.upgrades.currentReelSpeed = 1f;
         s.upgrades.currentBarStability = 1f;
         s.upgrades.currentBoatCapacity = _economyBalance.startingBoatInventoryCapacity;
         s.upgrades.currentHousingSlots = _economyBalance.startingHousingSlots;
-        s.currentZoneId = "calm_coastal_waters";
-        s.lastSaveTime = DateTime.UtcNow.ToString("O");
 
         for (int i = 0; i < _economyBalance.startingNetCount; i++)
         {
@@ -104,10 +115,10 @@ public class GameManager : MonoBehaviour
     public EconomySystem GetEconomySystem() => _economySystem;
     public NetSystem GetNetSystem() => _netSystem;
 
-    public FishSpeciesData GetSpeciesData(string id) => _allSpecies.FirstOrDefault(s => s.speciesId == id);
-    public MaterialData GetMaterialData(string id) => _allMaterials.FirstOrDefault(m => m.materialId == id);
-    public ZoneData GetZoneData(string id) => _allZones.FirstOrDefault(z => z.zoneId == id);
-    public NetTierData GetNetTier(int tier) => _allNetTiers.FirstOrDefault(t => t.tier == tier);
+    public FishSpeciesData GetSpeciesData(string id) => _speciesMap.GetValueOrDefault(id);
+    public MaterialData GetMaterialData(string id) => _materialMap.GetValueOrDefault(id);
+    public ZoneData GetZoneData(string id) => _zoneMap.GetValueOrDefault(id);
+    public NetTierData GetNetTier(int tier) => _netTierMap.GetValueOrDefault(tier);
 
     private void LogSummary()
     {
@@ -122,6 +133,7 @@ public class GameManager : MonoBehaviour
         _saveService.DeleteSave();
         _state = CreateDefaultState();
         LogSummary();
+        InitSystems();
         EventBus.MoneyChanged(_state.money);
         EventBus.InventoryChanged();
     }

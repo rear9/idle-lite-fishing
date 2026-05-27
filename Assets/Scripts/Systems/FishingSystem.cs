@@ -15,6 +15,7 @@ public class FishingSystem : MonoBehaviour
     private GameState _state;
     private InventorySystem _inventory;
     private EconomyBalanceData _economy;
+    private static readonly string[] junk = {"plastic_bottle", "rope", "wood"};
 
     public void Initialize(GameState state, InventorySystem inventory, EconomyBalanceData economy)
     {
@@ -44,8 +45,7 @@ public class FishingSystem : MonoBehaviour
         var pool = reachable.Count > 0 ? reachable : zone.availableFish;
         FishSpeciesData species = WeightedPick(pool);
         if (species == null) return null;
-
-        EventBus.FishCaught(null);
+        
         return new FishEncounter
         {
             species = species,
@@ -62,18 +62,19 @@ public class FishingSystem : MonoBehaviour
         }
         else if (Random.value < _economy.failedFishingJunkChance)
         {
-            string[] junk = { "plastic_bottle", "rope", "wood" };
             _inventory.AddMaterial(junk[Random.Range(0, junk.Length)], 1);
         }
     }
 
     private void CreateFish(FishSpeciesData sp, float perf)
     {
-        float wT = Mathf.Clamp01(perf * 0.9f + Random.value * 0.1f);
-        float lT = Mathf.Clamp01(perf * 0.9f + Random.value * 0.1f);
-        float weight = Mathf.Lerp(sp.minWeight, sp.maxWeight, wT);
-        float length = Mathf.Lerp(sp.minLength, sp.maxLength, lT);
+        float weight = Random.Range(sp.minWeight, sp.maxWeight); // pre-rolled
+        float length = Random.Range(sp.minLength, sp.maxLength);
         int seed = Random.Range(0, 10000);
+        
+        int baseQuality = FishQualityCalculator.CalculateQuality(sp, weight, length, seed);
+        int bonusQuality = perf >= 0.8f ? 1 : 0; // bonus point for a clean catch
+        int finalQuality = Mathf.Clamp(baseQuality + bonusQuality, 1, 10);
 
         FishInstance fish = new FishInstance
         {
@@ -83,7 +84,7 @@ public class FishingSystem : MonoBehaviour
             weight = weight,
             length = length,
             randomSeed = seed,
-            quality = FishQualityCalculator.CalculateQuality(sp, weight, length, seed),
+            quality = finalQuality,
             state = FishState.Inventory
         };
 

@@ -9,10 +9,9 @@ public static class FishQualityCalculator
         float l = Mathf.InverseLerp(sp.minLength, sp.maxLength, length);
         float variance = (Seeded(seed) * 2f - 1f) * 0.1f;
 
-        float raw = 0.35f * rarity
-                  + 0.25f * w
-                  + 0.25f * l
-                  + 0.15f * rarity
+        float raw = 0.4f * rarity
+                  + 0.3f * w
+                  + 0.3f * l
                   + variance;
 
         return Mathf.Clamp(Mathf.RoundToInt(raw * 10f), 1, 10);
