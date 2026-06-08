@@ -23,18 +23,13 @@ public class FishingMinigameView : MonoBehaviour
     private InputHandler _input;
     private FishingSystem _fishingSystem;
 
-    private float _markerPos;
-    private float _zonePos;
-    private float _zoneHeight;
-    private float _catchProgress;
-    private float _escapeProgress;
-    private float _totalTime;
     private float _barHeight;
     private bool _active;
 
     private void Awake()
     {
         if (_cancelButton) _cancelButton.onClick.AddListener(Cancel);
+        _barHeight = _barArea != null ? _barArea.rect.height : 600f;
         _input = FindFirstObjectByType<InputHandler>();
     }
 
@@ -68,21 +63,23 @@ public class FishingMinigameView : MonoBehaviour
 
     private void UpdateVisuals()
     {
+        float zoneHeight = _minigame.GetZoneHeight();
+
         if (_fishZone != null)
         {
-            float zY = Mathf.Lerp(-_barHeight / 2f + _zoneHeight * _barHeight / 2f, _barHeight / 2f - _zoneHeight * _barHeight / 2f, _zonePos);
+            float zY = Mathf.Lerp(-_barHeight / 2f + zoneHeight * _barHeight / 2f, _barHeight / 2f - zoneHeight * _barHeight / 2f, _minigame.ZonePos);
             _fishZone.anchoredPosition = new Vector2(_fishZone.anchoredPosition.x, zY);
-            _fishZone.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, _zoneHeight * _barHeight);
+            _fishZone.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, zoneHeight * _barHeight);
         }
 
         if (_playerMarker != null)
         {
-            float mY = Mathf.Lerp(-_barHeight / 2f, _barHeight / 2f, _markerPos);
+            float mY = Mathf.Lerp(-_barHeight / 2f, _barHeight / 2f, _minigame.MarkerPos);
             _playerMarker.anchoredPosition = new Vector2(_playerMarker.anchoredPosition.x, mY);
         }
 
-        if (_catchProgressBar) _catchProgressBar.fillAmount = _catchProgress;
-        if (_escapeProgressBar) _escapeProgressBar.fillAmount = _escapeProgress;
+        if (_catchProgressBar) _catchProgressBar.fillAmount = _minigame.CatchProgress;
+        if (_escapeProgressBar) _escapeProgressBar.fillAmount = _minigame.EscapeProgress;
     }
 
     public void Cancel()
